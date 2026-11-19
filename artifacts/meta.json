@@ -1,0 +1,21 @@
+{
+  "features": [
+    "hour",
+    "amount",
+    "is_transfer",
+    "oldbalanceOrg",
+    "newbalanceOrig",
+    "oldbalanceDest",
+    "newbalanceDest",
+    "errorOrig",
+    "errorDest"
+  ],
+  "threshold": 0.9,
+  "review_cost_assumed": 50,
+  "train_steps": "1-300",
+  "val_steps": "301-400",
+  "types_in_scope": [
+    "TRANSFER",
+    "CASH_OUT"
+  ]
+}

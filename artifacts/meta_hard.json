@@ -1,0 +1,13 @@
+{
+  "features": [
+    "hour",
+    "amount",
+    "is_transfer",
+    "dest_prior_count"
+  ],
+  "threshold": 0.14,
+  "review_cost_assumed": 50,
+  "needs_state": "dest_prior_count = number of earlier TRANSFER/CASH_OUT rows to the same nameDest",
+  "train_steps": "1-300",
+  "val_steps": "301-400"
+}
