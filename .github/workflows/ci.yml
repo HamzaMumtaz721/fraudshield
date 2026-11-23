@@ -10,4 +10,4 @@ jobs:
           python-version: "3.11"
       - run: pip install -r requirements.txt pytest httpx
       - run: pytest -q
-      - run: docker build -t fraudshield .
+      - run: docker build -f docker/Dockerfile.api -t fraudshield .

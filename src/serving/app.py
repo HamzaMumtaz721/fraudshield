@@ -10,7 +10,9 @@ import xgboost as xgb
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 
-BASE = Path(__file__).parent
+from src.features.preprocessing import add_features
+
+BASE = Path(__file__).resolve().parents[2]   # project root
 META = json.load(open(BASE / "artifacts" / "meta.json"))
 FEATURES = META["features"]
 THRESHOLD = META["threshold"]
@@ -45,18 +47,7 @@ class Transaction(BaseModel):
 
 
 def build_features(t: Transaction) -> pd.DataFrame:
-    row = {
-        "hour": t.step % 24,
-        "amount": t.amount,
-        "is_transfer": int(t.type == "TRANSFER"),
-        "oldbalanceOrg": t.oldbalanceOrg,
-        "newbalanceOrig": t.newbalanceOrig,
-        "oldbalanceDest": t.oldbalanceDest,
-        "newbalanceDest": t.newbalanceDest,
-        "errorOrig": t.newbalanceOrig + t.amount - t.oldbalanceOrg,
-        "errorDest": t.oldbalanceDest + t.amount - t.newbalanceDest,
-    }
-    return pd.DataFrame([row])[FEATURES]
+    return add_features(pd.DataFrame([t.model_dump()]))[FEATURES]
 
 
 def risk_tier(score: float) -> str:
