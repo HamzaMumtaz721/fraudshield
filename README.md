@@ -20,3 +20,11 @@ Open http://127.0.0.1:8000/docs
 - `scripts/` analysis and simulation scripts (run from the project root)
 - `artifacts/` trained model files and metadata
 - `docker/` Dockerfiles
+## API
+| Endpoint | Purpose |
+|---|---|
+| GET /health | Application health |
+| GET /model-info | Model version, SHA-256, threshold, features |
+| POST /predict | Score one transaction (`/score` is an alias) |
+| GET /metrics | Prometheus metrics |
+| GET /stats | JSON counters |

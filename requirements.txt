@@ -5,3 +5,4 @@ pandas<3
 numpy
 pydantic
 scikit-learn
+prometheus-client
