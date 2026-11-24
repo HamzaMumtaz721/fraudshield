@@ -5,3 +5,4 @@ replay*.csv
 __pycache__/
 drift_report*.html
 .pytest_cache/
+.env
