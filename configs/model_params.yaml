@@ -1,0 +1,35 @@
+data:
+  raw_path: data/raw/paysim.csv
+  types_in_scope: [TRANSFER, CASH_OUT]
+  train_steps: [1, 300]
+  val_steps: [301, 400]
+  test_steps: [401, 743]
+
+features: [hour, amount, is_transfer, oldbalanceOrg, newbalanceOrig,
+           oldbalanceDest, newbalanceDest, errorOrig, errorDest]
+
+evaluation:
+  threshold: 0.90
+  review_cost: 50          # assumed review fee, not measured
+
+# Quality gate: a candidate must pass on VALIDATION data to be registered.
+# Chosen well below current performance (val PR-AUC about 0.997) to catch regressions;
+# the numbers are not tuned.
+gate:
+  min_val_pr_auc: 0.99
+  min_val_recall: 0.95
+
+mlflow:
+  tracking_uri: http://127.0.0.1:5000
+  experiment: fraudshield
+  registered_model: fraudshield-xgb
+
+search:
+  base:
+    n_estimators: 300
+    early_stopping_rounds: 20
+    random_state: 1
+  grid:
+    max_depth: [4, 6]
+    learning_rate: [0.1, 0.3]
+    pos_weight_mode: [full, sqrt]   # scale_pos_weight = n_neg/n_pos, or its square root
