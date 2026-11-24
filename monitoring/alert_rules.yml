@@ -1,0 +1,38 @@
+groups:
+  - name: fraudshield
+    rules:
+      - alert: APIDown
+        expr: up{job="fraudshield-api"} == 0
+        for: 20s
+        labels:
+          severity: critical
+        annotations:
+          summary: "FraudShield API is not responding"
+          investigate: "Check 'docker compose ps' and 'docker compose logs api'; restart the service."
+
+      - alert: HighErrorRate
+        expr: sum(rate(fraudshield_requests_total{status=~"5.."}[1m])) / sum(rate(fraudshield_requests_total[1m])) > 0.05
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "More than 5% of requests return a server error"
+          investigate: "Read the API logs; if a new model was just promoted, roll back via artifacts/registry.json."
+
+      - alert: HighLatencyP95
+        expr: histogram_quantile(0.95, sum by (le) (rate(fraudshield_request_latency_seconds_bucket[1m]))) > 0.5
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "95th percentile latency is above 0.5 seconds"
+          investigate: "Check CPU usage and request volume; scale the API replicas."
+
+      - alert: DataQualityFailures
+        expr: sum(increase(fraudshield_requests_total{status="422"}[1m])) > 5
+        for: 10s
+        labels:
+          severity: warning
+        annotations:
+          summary: "More than 5 invalid requests in one minute"
+          investigate: "Find the client sending malformed input; check for an upstream schema change."
