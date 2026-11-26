@@ -6,7 +6,6 @@ __pycache__/
 drift_report*.html
 .pytest_cache/
 .env
-data/raw/
 mlruns/
 mlartifacts/
 mlflow.db

@@ -1,0 +1,50 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python -m src.data.prepare
+    deps:
+    - path: data/raw/paysim.csv
+      hash: md5
+      md5: e92a5f7447f43712f1dca473d0b0fa85
+      size: 493534783
+    - path: src/data/ingestion.py
+      hash: md5
+      md5: 0d771738f9bc3ed9ff8ae8a35d07ac27
+      size: 572
+    - path: src/data/prepare.py
+      hash: md5
+      md5: af52feb52ae3500928192137fcaf0403
+      size: 1141
+    - path: src/data/validation.py
+      hash: md5
+      md5: b91165f4448349070ad821a0489d27e5
+      size: 1528
+    - path: src/features/preprocessing.py
+      hash: md5
+      md5: b6fb66b5e29bb39ecb821ff819bade09
+      size: 455
+    params:
+      configs/model_params.yaml:
+        data:
+          raw_path: data/raw/paysim.csv
+          types_in_scope:
+          - TRANSFER
+          - CASH_OUT
+          train_steps:
+          - 1
+          - 300
+          val_steps:
+          - 301
+          - 400
+          test_steps:
+          - 401
+          - 743
+    outs:
+    - path: data/processed/prepare_report.json
+      hash: md5
+      md5: ab784e43743240480dac29ecb58da570
+      size: 286
+    - path: data/processed/transactions.parquet
+      hash: md5
+      md5: 6b03d645e5d9eb7367910d4eff951e37
+      size: 87806308

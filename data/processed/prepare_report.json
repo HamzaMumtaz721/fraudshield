@@ -1,0 +1,17 @@
+{
+  "validation": "passed",
+  "rows_in_scope": 2770409,
+  "frauds_in_scope": 8213,
+  "train_steps": {
+    "rows": 1780544,
+    "frauds": 3401
+  },
+  "val_steps": {
+    "rows": 748992,
+    "frauds": 1076
+  },
+  "test_steps": {
+    "rows": 240873,
+    "frauds": 3736
+  }
+}

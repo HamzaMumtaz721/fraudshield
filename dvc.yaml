@@ -1,0 +1,17 @@
+stages:
+  prepare:
+    cmd: python -m src.data.prepare
+    deps:
+      - data/raw/paysim.csv
+      - src/data/prepare.py
+      - src/data/ingestion.py
+      - src/data/validation.py
+      - src/features/preprocessing.py
+    params:
+      - configs/model_params.yaml:
+          - data
+    outs:
+      - data/processed/transactions.parquet
+    metrics:
+      - data/processed/prepare_report.json:
+          cache: false
