@@ -37,3 +37,14 @@ Open http://127.0.0.1:8000/docs
 - Grafana: http://127.0.0.1:3000 (login: admin / password from .env)
 Alert rules: `monitoring/alert_rules.yml` (APIDown, HighErrorRate, HighLatencyP95, DataQualityFailures).
 Cleanup: `docker compose down`
+## Data versioning (DVC)
+The PaySim dataset is tracked by DVC (`data/raw/paysim.csv.dvc`); the CSV is not in Git.
+
+    pip install dvc
+    dvc remote list    # the committed remote is a local folder on one laptop;
+                       # on another machine set your own: dvc remote modify localstore url <path>
+    dvc pull           # downloads the data
+    dvc repro          # validates the data and builds data/processed/
+
+Dataset versions are marked with Git tags (`data-v1`). Every MLflow run records
+`git_commit` and `dvc_data_md5`. See `docs/dvc_merge_conflicts.md` for merge conflicts.
