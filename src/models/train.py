@@ -62,6 +62,11 @@ def log_model(model):
     except TypeError:                       # older MLflow versions
         return mlflow.xgboost.log_model(model, artifact_path="model")
 
+def dvc_md5(path):
+    try:
+        return yaml.safe_load(open(path + ".dvc"))["outs"][0]["md5"]
+    except Exception:
+        return "untracked"
 
 def main():
     ap = argparse.ArgumentParser()
@@ -92,7 +97,8 @@ def main():
     print(f"train {len(train)} rows ({n_pos} frauds) | val {len(val)} | test {len(test)}")
 
     commit, dirty = git_info()
-    tags = {"git_commit": commit, "git_dirty": str(dirty), "data_sha256": data_sha}
+    tags = {"git_commit": commit, "git_dirty": str(dirty), "data_sha256": data_sha,
+            "dvc_data_md5": dvc_md5(raw_path)}
     s = cfg["search"]
     combos = list(itertools.product(s["grid"]["max_depth"], s["grid"]["learning_rate"],
                                     s["grid"]["pos_weight_mode"]))
